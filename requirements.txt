@@ -1,0 +1,7 @@
+openai==1.83
+crewai
+crewai_tools 
+arxiv 
+groq
+python-dotenv
+litellm==1.73
