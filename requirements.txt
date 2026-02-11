@@ -5,3 +5,5 @@ arxiv
 groq
 python-dotenv
 litellm==1.73
+sec-api
+embedchain
