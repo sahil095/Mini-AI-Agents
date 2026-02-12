@@ -23,6 +23,7 @@ class SEC10KTool(RagTool):
     args_schema: Type[BaseModel] = SEC10KToolSchema
 
     def __init__(self, stock_name: Optional[str] = None, **kwargs):
+        """ Initialize the SEC10KTool with the given stock name"""
         print(f"Initializing SEC10KTool with stock_name: {stock_name}")
         super().__init__(**kwargs)
         if stock_name is not None:
@@ -35,4 +36,56 @@ class SEC10KTool(RagTool):
     
     def get_10k_url_content(self, stock_name: str) -> Optional[str]:
         """ Fetches the URL content as txt of the latest 10-K form for the given stock""" 
-        
+        try:
+            query_api = QueryApi(api_key=os.getenv("SEC_API_API_KEY"))
+            query = {
+                query: {
+                    "query_string": {
+                            "query": f"ticker:{stock_name} AND formType:\"10-K\"",
+                        }
+                    },
+                    "from": 0,
+                    "size": 1,
+                    "sort": [
+                        {
+                            "filedAt": {
+                                "order": "desc"
+                            }
+                        }
+                    ]
+                }
+            filings = query_api.get_filings(query=query)['filings']
+            if len(filings) > 0:
+                print("No filings found for this stock")
+                return None
+            
+            url = filings[0]['linktoFilingDetails']
+
+            headers = {
+                "User-Agent": "",
+                "Accept-Encoding": "gzip, deflate",
+                "Host": "www.sec.gov"
+            }
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            h = html2text.HTML2Text()
+            h.ignore_links = False
+            text = h.handle(response.content.decode('utf-8'))
+
+            text = re.sub(r"[^a-zA-Z0-9\s\n]", "", text)
+            return text
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP Error occurred: {e}")
+            return None
+        except Exception as e:
+            print(f"Error fetching 10-K content for {stock_name}: {e}")
+            return None
+    
+    def add(self, *args:Any, **kwargs: Any)-> None:
+        """ Add the 10-K content to the tool"""
+        kwargs["data_type"] = DataType.TEXT
+        super().add(*args, **kwargs)
+
+    def _run(self, search_query: str, **kwargs: Any) -> Any:
+        """ Perform semantic search on the 10-K content for the given query"""
+        return super()._run(search_query, **kwargs)
