@@ -39,7 +39,7 @@ class SEC10KTool(RagTool):
         try:
             query_api = QueryApi(api_key=os.getenv("SEC_API_API_KEY"))
             query = {
-                query: {
+                "query": {
                     "query_string": {
                             "query": f"ticker:{stock_name} AND formType:\"10-K\"",
                         }
@@ -55,11 +55,11 @@ class SEC10KTool(RagTool):
                     ]
                 }
             filings = query_api.get_filings(query=query)['filings']
-            if len(filings) > 0:
+            if len(filings) == 0:
                 print("No filings found for this stock")
                 return None
             
-            url = filings[0]['linktoFilingDetails']
+            url = filings[0]['linkToFilingDetails']
 
             headers = {
                 "User-Agent": "",
