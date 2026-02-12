@@ -1,9 +1,9 @@
 import os
 from typing import Any, Optional, Type
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from crewai_tools import RagTool  # pyright: ignore[reportMissingImports]
 from sec_api import QueryApi    # pyright: ignore[reportMissingImports]
-from embedchain.models.data_type import DataType  # pyright: ignore[reportMissingImports]
+from crewai_tools.rag.data_types import DataType  # pyright: ignore[reportMissingImports]
 import requests
 import html2text  # pyright: ignore[reportMissingImports]
 import re

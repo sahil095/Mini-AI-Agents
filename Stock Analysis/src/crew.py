@@ -12,11 +12,11 @@ from crewai_tools import WebsiteSearchTool, ScrapeWebsiteTool, TXTSearchTool
 from dotenv import load_dotenv
 load_dotenv()
 
-from langchain.llms import Ollama
+# from langchain.llms import Ollama
 # llm = Ollama(model="llama3.1")
 
 llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+    model="groq/llama-3.1-8b-instant",
     temperature=0.5,
     api_key=os.getenv("GROQ_API_KEY"),
     base_url="https://api.groq.com/openai/v1",
@@ -73,7 +73,7 @@ class StockAnalysisCrew:
     @agent
     def financial_analyst_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['filing_analyst'],
+            config=self.agents_config['financial_analyst'],
             llm=llm,
             tools=[
                 ScrapeWebsiteTool(),
