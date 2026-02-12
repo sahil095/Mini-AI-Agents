@@ -1,4 +1,4 @@
-from crewai_tools import BaseTool  # pyright: ignore[reportMissingImports]
+from crewai.tools import BaseTool
 import ast
 import operator
 import re
