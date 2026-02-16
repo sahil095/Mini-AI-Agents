@@ -2,12 +2,12 @@ import os
 
 from typing import List
 from crewai import Agent, Crew, Task, Process, LLM  # pyright: ignore[reportMissingImports]
-from crewai.project import CrewBase, agent, crew, task
+from crewai.project import CrewBase, agent, crew, task  # pyright: ignore[reportMissingImports]
 
 from tools.sec_tools import SEC10KTool, SEC10QTool
 from tools.calculator_tool import CalculatorTool
 
-from crewai_tools import WebsiteSearchTool, ScrapeWebsiteTool, TXTSearchTool
+from crewai_tools import WebsiteSearchTool, ScrapeWebsiteTool, TXTSearchTool  # pyright: ignore[reportMissingImports]
 
 from dotenv import load_dotenv
 load_dotenv()
